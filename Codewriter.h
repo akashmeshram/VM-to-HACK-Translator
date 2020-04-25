@@ -16,9 +16,17 @@ class Codewriter {
         void writePop(string, int);
     public:
         Codewriter(string);
+        // void setFileName(string);
         void writeArithmatic(string);
         void writePushPop(vmCmdType, string, int);
         void close();
+        // void writeInit();
+        void writeLabel(string);
+        void writeGoto(string);
+        void writeIf(string);
+        // void writeCall(string, int);
+        // void writeReturn();
+        // void writeFunction(string, int);
 };
 
 #endif

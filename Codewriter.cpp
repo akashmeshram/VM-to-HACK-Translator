@@ -28,8 +28,10 @@ void Codewriter::writeArithmatic(string cmd) {
         else if(cmd == "lt") asmStream << "@LABEL" << pos << "\nD;JLT" << '\n';
 
         asmStream << "@LABEL" << pos << "END" << "\nD=0\n0;JMP" << '\n';
+
         asmStream << '(' << "LABEL" << pos << ')' << '\n';
         asmStream << "@LABEL" << pos << "END" << "\nD=-1\n0;JMP" << '\n';
+
         asmStream << '(' << "LABEL" << pos << "END" << ')' << '\n';
         asmStream << "@SP\nA=M-1\nA=A-1\nM=D" << '\n';
     }    
@@ -79,4 +81,16 @@ void Codewriter::writePush(string arg1, int arg2) {
     }
     asmStream << "@SP\nA=M\nM=D" << '\n';
     asmStream << "@SP\nM=M+1" << '\n';
+}
+
+void Codewriter::writeLabel(string label) {
+    asmStream << '(' << label << ')' << '\n';
+}
+
+void Codewriter::writeGoto(string label) {
+    asmStream << '@' << label << "\n0;JMP" << '\n';
+}
+
+void Codewriter::writeIf(string label) {
+    asmStream <<"@SP\nM=M-1\nA=M\nD=M\n@" << label << "\nD;JNE" << '\n';
 }

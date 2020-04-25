@@ -16,8 +16,17 @@ void translator(string vmFile) {
 			else if (vm.cmdType() == C_POP){
                 cw.writePushPop(C_POP, vm.arg1(), vm.arg2());
 			}
-			else if (vm.cmdType() == C_PUSH) {
-				cw.writePushPop(C_PUSH, vm.arg1(), vm.arg2());
+			else if (vm.cmdType() == C_PUSH){
+                cw.writePushPop(C_PUSH, vm.arg1(), vm.arg2());
+			}
+			else if (vm.cmdType() == C_LABEL) {
+				cw.writeLabel(vm.arg1());
+			}
+			else if (vm.cmdType() == C_GOTO) {
+				cw.writeGoto(vm.arg1());
+			}
+			else if (vm.cmdType() == C_IF) {
+				cw.writeIf(vm.arg1());
 			}
 		}
 	vm.close();

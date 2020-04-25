@@ -32,7 +32,7 @@ vmCmdType Parser::cmdType() {
 	else if (cmd == "pop") return C_POP;
 	else if (cmd == "label") return C_LABEL;
 	else if (cmd == "goto")	return C_GOTO;
-	else if (cmd == "if") return C_IF;
+	else if (cmd == "if-goto") return C_IF;
 	else if (cmd == "function")	return C_FUNCTION;
 	else if (cmd == "return") return C_RETURN;
 	else if (cmd == "call")	return C_CALL;	
