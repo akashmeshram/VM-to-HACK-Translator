@@ -2,6 +2,7 @@
 #define CODEWRITER
 
 #include<iostream>
+#include<vector>
 #include<string>
 #include<fstream>
 #include "VMcmds.h"
@@ -25,8 +26,8 @@ class Codewriter {
         void writeGoto(string);
         void writeIf(string);
         // void writeCall(string, int);
-        // void writeReturn();
-        // void writeFunction(string, int);
+        void writeReturn();
+        void writeFunction(string, int);
 };
 
 #endif

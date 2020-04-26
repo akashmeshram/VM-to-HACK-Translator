@@ -92,5 +92,23 @@ void Codewriter::writeGoto(string label) {
 }
 
 void Codewriter::writeIf(string label) {
-    asmStream <<"@SP\nM=M-1\nA=M\nD=M\n@" << label << "\nD;JNE" << '\n';
+    asmStream <<"@SP\nM=M-1\nA=M\nD=M" << '\n';
+    asmStream << "@" << label << "\nD;JNE" << '\n';
+}
+
+void Codewriter::writeFunction(string fName, int vArgs) {
+    asmStream << '(' << fName << ')' << '\n';
+    while(vArgs--) writePush("constant", 0); 
+}
+
+void Codewriter::writeReturn() {
+    writePop("argument", 0);
+    asmStream << "@ARG\nD=M+1\n@SP\nM=D" << '\n';
+    asmStream << "@LCL\nD=M\n@R13\nM=D" << '\n';
+    vector<string> registers = {"THAT", "THIS", "ARG", "LCL", "R14"};
+    for(string regi : registers) {
+        asmStream << "@R13\nM=M-1\nA=M\nD=M" << '\n';
+        asmStream << '@' << regi << "\nM=D" << '\n';
+    }
+    asmStream<<"@R14\nA=M\n0;JMP" << '\n'; 
 }

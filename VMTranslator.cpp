@@ -28,6 +28,12 @@ void translator(string vmFile) {
 			else if (vm.cmdType() == C_IF) {
 				cw.writeIf(vm.arg1());
 			}
+			else if (vm.cmdType() == C_FUNCTION) {
+				cw.writeFunction(vm.arg1(), vm.arg2());
+			}
+			else if (vm.cmdType() == C_RETURN) {
+				cw.writeReturn();
+			}
 		}
 	vm.close();
 	cw.close();
