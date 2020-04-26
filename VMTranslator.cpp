@@ -34,6 +34,9 @@ void translator(string vmFile) {
 			else if (vm.cmdType() == C_RETURN) {
 				cw.writeReturn();
 			}
+			else if (vm.cmdType() == C_CALL) {
+				cw.writeCall(vm.arg1(), vm.arg2());
+			}
 		}
 	vm.close();
 	cw.close();

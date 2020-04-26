@@ -12,7 +12,7 @@ class Codewriter {
     private:
         string asmFile;
         ofstream asmStream;
-        int pos;
+        int lpos;
         void writePush(string, int);
         void writePop(string, int);
     public:
@@ -25,7 +25,7 @@ class Codewriter {
         void writeLabel(string);
         void writeGoto(string);
         void writeIf(string);
-        // void writeCall(string, int);
+        void writeCall(string, int);
         void writeReturn();
         void writeFunction(string, int);
 };

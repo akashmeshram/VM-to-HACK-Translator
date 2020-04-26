@@ -1,7 +1,7 @@
 #include "Codewriter.h"
 
 Codewriter::Codewriter(string filename): asmFile(filename) {
-    pos = 0;
+    lpos = 0;
     asmStream.open(asmFile);
 }
 
@@ -23,20 +23,20 @@ void Codewriter::writeArithmatic(string cmd) {
     else {
         asmStream << "D=M-D" << '\n';
 
-        if(cmd == "eq") asmStream << "@LABEL" << pos << "\nD;JEQ" << '\n';
-        else if(cmd == "gt") asmStream << "@LABEL" << pos << "\nD;JGT" << '\n';
-        else if(cmd == "lt") asmStream << "@LABEL" << pos << "\nD;JLT" << '\n';
+        if(cmd == "eq") asmStream << "@LABEL" << lpos << "\nD;JEQ" << '\n';
+        else if(cmd == "gt") asmStream << "@LABEL" << lpos << "\nD;JGT" << '\n';
+        else if(cmd == "lt") asmStream << "@LABEL" << lpos << "\nD;JLT" << '\n';
 
-        asmStream << "@LABEL" << pos << "END" << "\nD=0\n0;JMP" << '\n';
+        asmStream << "@LABEL" << lpos << "END" << "\nD=0\n0;JMP" << '\n';
 
-        asmStream << '(' << "LABEL" << pos << ')' << '\n';
-        asmStream << "@LABEL" << pos << "END" << "\nD=-1\n0;JMP" << '\n';
+        asmStream << '(' << "LABEL" << lpos << ')' << '\n';
+        asmStream << "@LABEL" << lpos << "END" << "\nD=-1\n0;JMP" << '\n';
 
-        asmStream << '(' << "LABEL" << pos << "END" << ')' << '\n';
+        asmStream << '(' << "LABEL" << lpos << "END" << ')' << '\n';
         asmStream << "@SP\nA=M-1\nA=A-1\nM=D" << '\n';
     }    
     asmStream << "@SP\nM=M-1" << '\n';
-    pos++;
+    lpos++;
 }
 
 void Codewriter::writePushPop(vmCmdType cmdType, string arg1, int arg2) {
@@ -111,4 +111,19 @@ void Codewriter::writeReturn() {
         asmStream << '@' << regi << "\nM=D" << '\n';
     }
     asmStream<<"@R14\nA=M\n0;JMP" << '\n'; 
+}
+
+void Codewriter::writeCall(string fName, int vArgs) {
+    string flable = fName + '$' + to_string(lpos++);
+    asmStream << '@' << flable << "\nD=A" << '\n';
+    asmStream << "@SP\nA=M\nM=D\n@SP\nM=M+1" << '\n';
+    vector<string> registers = {"LCL", "ARG", "THAT", "THIS"};
+    for(string regi : registers) {
+        asmStream << '@' << regi << "\nD=M" << '\n';
+        asmStream << "@SP\nA=M\nM=D\n@SP\nM=M+1" << '\n';
+    }
+    asmStream << "@SP\nD=M\n@LCL\nM=D" << '\n';
+    asmStream << "@5\nD=D-A\n@" << vArgs << "\nD=D-A\n@ARG\nM=D" << '\n';
+    writeGoto(fName);
+    writeLabel(flable);
 }
